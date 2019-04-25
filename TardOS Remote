@@ -1,0 +1,21 @@
+--This is the sister program to TardOS, TARDIS control program. It is very lightweight, and  the only thing it does is send whatever message you type into it to the main control computer. It receives no feedback so make sure your TARDIS works before leaving it.
+
+
+local event = require("event")
+local term = require("term")
+local component = require ("component")
+
+tunnel = component.tunnel
+
+
+function main()
+term.clear()
+print("TardOS Remote Control")
+term.write("Input: ")
+input = term.read()
+tunnel.send(input)
+main()
+end
+
+
+main()
