@@ -17,21 +17,25 @@ tHull = handles.getHull()
 
 function fly(waypointID)
   print("Commencing flight")
+  
+  if handles.canFly() == false then
+    print("Warning, unable to lift off due to subsystem damage")
+	return("WARNING: Subsystem damage prevents flight.")
+  end
+  
   if tFuel <= 0.5 then
     print("Warning, fuel at less than 50%, refuel as soon as possible")
   elseif tFuel <= 0.25 then
     print("Warning, fuel at less than 25%, unable to commence automatic flight sequence")
-	os.sleep(2)
-    return
+    return "WARNING: Fuel too low for automatic flight"
   end
   if waypointID ~= nil then
     local wpX, wpY, wpZ, wpDim, wpName = handles.getWaypoint(tonumber(waypointID))
-    print(tostring(wpX))
     handles.setTardisDestination(wpX,wpY,wpZ,wpDim) 
   end
   
   handles.startFlight()
-  os.sleep(1)  
+  return "INFO: Command received."
 end
 
 function updateStats()
@@ -45,21 +49,58 @@ end
 function setX(x)
   local prevX, prevY, prevZ, prevDim = handles.getTardisDestination()
   handles.setTardisDestination(tonumber(x), prevY, prevZ, prevDim)
+  return "INFO: Command received."
 end
 
 function setY(y)
   local prevX, prevY, prevZ, prevDim = handles.getTardisDestination()
   handles.setTardisDestination(prevX, tonumber(y), prevZ, prevDim)
+  return "INFO: Command received."
 end
 
 function setZ(z)
   local prevX, prevY, prevZ, prevDim = handles.getTardisDestination()
   handles.setTardisDestination(prevX, prevY, tonumber(z), prevDim)
+  return "INFO: Command received."
 end
 
 function setDim(dim)
   local prevX, prevY, prevZ, prevDim = handles.getTardisDestination()
   handles.setTardisDestination(prevX, prevY, prevZ, tonumber(dim))
+  return "INFO: Command received."
+end
+
+function emergency()
+  local prevX, prevY, prevZ = handles.getTardisPos()
+  local prevDim = handles.getDimension()
+  print("Commencing emergency protocol")
+  print("Flying to waypoint ID 0")
+  fly(0)
+  
+  while handles.isInFlight() do
+    term.write("Flight Time: "..handles.getTravelTime())
+    os.sleep(1)
+    term.clearLine()
+  end  
+  
+  print("Arrived at waypoint ID 0")
+  print("Commencing refueling and repairing")
+  handles.setFueling(true)
+  handles.setRepairing(true)
+  
+  while handles.getFuel() ~= 1.0 and handles.getHull() ~= 1.0 do
+    term.write("Repairing and refueling.)
+    os.sleep(1)
+    term.clearLine()
+  end
+  
+  print("TARDIS refueled and repaired")  
+  handles.setTardisDestination(prevX, prevY, prevZ, prevDim)
+  
+  os.sleep(1)
+  
+  fly()
+  return "INFO: TARDIS returning."
 end
 
 function printScreen()
@@ -97,16 +138,19 @@ function main(eventName, from, port, var1, var2, message)
 
   while handles.isInFlight() do
     term.write("Flight Time: "..handles.getTravelTime())
-    os.sleep(0.5)
+    os.sleep(1)
     term.clearLine()
   end 
    
   printScreen()
   
   local input = ""
+  local modemMessage = false
+  local response = ""
   --Check if message is not nil
   if message ~= nil  then
     input = message
+	modemMessage = true
   else
     input = term.read()    
   end  
@@ -115,30 +159,39 @@ function main(eventName, from, port, var1, var2, message)
   cmd = stringsplit(input)
   
   if cmd[1] == "fly" then
-    fly()
+    response = fly()
   elseif cmd[1] == "setX" then
     print("Setting X to "..cmd[2])
-    setX(cmd[2])
+    response = setX(cmd[2])
   elseif cmd[1] == "setY" then
     print("Setting Y to "..cmd[2])
-    setY(cmd[2])
+    response = setY(cmd[2])
   elseif cmd[1] == "setZ" then
     print("Setting Z to "..cmd[2])
-    setZ(cmd[2])
+    response = setZ(cmd[2])
   elseif cmd[1] == "setDim" then
-    setDim(cmd[2])
+    response = setDim(cmd[2])
   elseif cmd[1] == "refuel" then
     handles.setFueling(true)
+	reponse = "INFO: Command received."
   elseif cmd[1] == "waypoint" then
-    fly(cmd[2])
+    reponse = fly(cmd[2])
+  elseif cmd[1] == "sos" then
+	response = emergency()
   else
     print("Invalid CMD")
+	reponse = "Invalid CMD")
     os.sleep(1)  
   end
+  
+  if modemMessage then
+    local tunnel = component.proxy(port)
+	tunnel.send(response)
+  end
+  
   main()
 end
 
-print("Starting TardOS")
 print("Stopping listener")
 event.ignore("modem_message", main)
 print("Starting listener")
