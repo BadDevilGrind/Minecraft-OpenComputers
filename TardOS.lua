@@ -20,7 +20,7 @@ function fly(waypointID)
   
   if handles.canFly() == false then
     print("Warning, unable to lift off due to subsystem damage")
-	return("WARNING: Subsystem damage prevents flight.")
+    return("WARNING: Subsystem damage prevents flight.")
   end
   
   if tFuel <= 0.5 then
@@ -150,7 +150,7 @@ function main(eventName, from, port, var1, var2, message)
   --Check if message is not nil
   if message ~= nil  then
     input = message
-	modemMessage = true
+    modemMessage = true
   else
     input = term.read()    
   end  
@@ -173,20 +173,22 @@ function main(eventName, from, port, var1, var2, message)
     response = setDim(cmd[2])
   elseif cmd[1] == "refuel" then
     handles.setFueling(true)
-	reponse = "INFO: Command received."
+    reponse = "INFO: Command received."
   elseif cmd[1] == "waypoint" then
     reponse = fly(cmd[2])
   elseif cmd[1] == "sos" then
-	response = emergency()
+    response = emergency()
   else
     print("Invalid CMD")
-	reponse = "Invalid CMD")
+    reponse = "Invalid CMD")
     os.sleep(1)  
   end
   
   if modemMessage then
     local tunnel = component.proxy(port)
-	tunnel.send(response)
+    print(port)
+    os.sleep(30)
+    tunnel.send(response)
   end
   
   main()
