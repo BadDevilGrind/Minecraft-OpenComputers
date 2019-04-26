@@ -6,6 +6,8 @@ local component = require("component")
 local os = require("os")
 local term = require("term")
 
+
+version = "v0.0.6"
 handles = component.tardisinterface
 
 tFuel =handles.getFuel()
@@ -107,7 +109,7 @@ function printScreen()
   term.clear()
   local fuelPercentage = tFuel * 100
   local hullPercentage = tHull * 100
-  print("--------------------------TardOS  v0.0.1--------------------------")
+  print("--------------------------TardOS  "..version.."--------------------------")
   print("Fuel: "..fuelPercentage.."%")
   print("Position: X: "..tPosX.." Y: "..tPosY.." Z: "..tPosZ.." Dim: "..handles.getDimensionName(handles.getDimension()).."("..handles.getDimension()..")")
   print("Destination: X: "..tDestX.." Y: "..tDestY.." Z: "..tDestZ.." Dim: "..handles.getDimensionName(tDestDim).."("..tDestDim..")")
