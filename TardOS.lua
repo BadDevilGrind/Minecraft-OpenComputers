@@ -89,7 +89,7 @@ function emergency()
   handles.setRepairing(true)
   
   while handles.getFuel() ~= 1.0 and handles.getHull() ~= 1.0 do
-    term.write("Repairing and refueling.)
+    term.write("Repairing and refueling.")
     os.sleep(1)
     term.clearLine()
   end
@@ -129,7 +129,7 @@ function stringsplit(inputstr, sep)
         return t
 end
 
-function main(eventName, from, port, var1, var2, message)
+function main(eventName, port, from, var1, var2, message)
   updateStats()
     
   if handles.isInFlight() then
@@ -176,18 +176,20 @@ function main(eventName, from, port, var1, var2, message)
     reponse = "INFO: Command received."
   elseif cmd[1] == "waypoint" then
     reponse = fly(cmd[2])
+  elseif cmd[1] == "door" then
+    doorState = handles.isDoorsOpened()
+    handles.setDoors(not doorState)
   elseif cmd[1] == "sos" then
     response = emergency()
   else
     print("Invalid CMD")
-    reponse = "Invalid CMD")
+    reponse = "Invalid CMD"
     os.sleep(1)  
   end
   
   if modemMessage then
     local tunnel = component.proxy(port)
     print(port)
-    os.sleep(30)
     tunnel.send(response)
   end
   
