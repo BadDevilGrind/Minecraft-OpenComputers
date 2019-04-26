@@ -185,7 +185,7 @@ function main(eventName, from, port, var1, var2, message)
   end
   
   if modemMessage then
-    local tunnel = component.proxy(port)
+    local tunnel = component.proxy(from)
 	tunnel.send(response)
   end
   
