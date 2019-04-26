@@ -176,7 +176,7 @@ function main(eventName, port, from, var1, var2, message)
     handles.setFueling(true)
     response = "INFO: Command received."
   elseif cmd[1] == "waypoint" then
-    reponse = fly(cmd[2])
+    response = fly(cmd[2])
   elseif cmd[1] == "door" then
     doorState = handles.isDoorsOpened()
     handles.setDoors(not doorState)
@@ -184,7 +184,7 @@ function main(eventName, port, from, var1, var2, message)
     response = emergency()
   else
     print("Invalid CMD")
-    reponse = "Invalid CMD"
+    response = "Invalid CMD"
     os.sleep(1)  
   end
   
