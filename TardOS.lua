@@ -173,7 +173,7 @@ function main(eventName, port, from, var1, var2, message)
     response = setDim(cmd[2])
   elseif cmd[1] == "refuel" then
     handles.setFueling(true)
-    reponse = "INFO: Command received."
+    response = "INFO: Command received."
   elseif cmd[1] == "waypoint" then
     reponse = fly(cmd[2])
   elseif cmd[1] == "door" then
