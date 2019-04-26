@@ -113,6 +113,7 @@ function printScreen()
   print("Destination: X: "..tDestX.." Y: "..tDestY.." Z: "..tDestZ.." Dim: "..handles.getDimensionName(tDestDim).."("..tDestDim..")")
   print("Flight Status: "..tostring(tCanFly))
   print("Hull: "..hullPercentage.."%")
+  print("Available cmds: fly, setX var, setY var, setZ var, refuel, door, waypoint var, sos")
   print("------------------------------------------------------------------")
   print()
 end
