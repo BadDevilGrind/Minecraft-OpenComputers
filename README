@@ -1,0 +1,27 @@
+Install instructions, from start to finish. If any OC component require a certain tier, it will be specified, otherwise 
+any tier should be fine.
+
+Building the TARDIS controller
+1. Craft the following items
+  1x Computer Case T3
+  1x Screen
+  1x CPU
+  2x Memory
+  1x GPU
+  2x Linked Card
+  1x Keyboard
+  1x Harddisk
+  1x Internet Card
+  1x EEPROM (Lua)
+  1x OpenOS Floppy Disk
+2. Setup the computer by placing the case, screen, and keyboard
+3. Insert in all components except 1 Linked Card
+4. Boot the computer
+5. Run the command: install
+6. After rebooting, remove the floppy disk, and run the command: wget https://raw.githubusercontent.com/BadDevilGrind/Minecraft-OpenComputers-TardOS/master/TardOS.lua TardOS
+7. Run the program by typing: TardOS
+
+Building the Remote
+8. Repeat the above steps until step 6, and do not craft any more Linked Cards
+9. Install the TardOS Remote with the command: wget https://raw.githubusercontent.com/BadDevilGrind/Minecraft-OpenComputers-TardOS/master/TardOS%20Remote TardOSRemote
+10. Run the program by typing: TardOSRemote
