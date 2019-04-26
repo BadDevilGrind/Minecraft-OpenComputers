@@ -10,6 +10,7 @@ tunnel = component.tunnel
 function main()
 term.clear()
 print("TardOS Remote Control")
+print("Available cmds: fly, setX var, setY var, setZ var, refuel, door, waypoint var, sos")
 term.write("Input: ")
 input = term.read()
 tunnel.send(input)
